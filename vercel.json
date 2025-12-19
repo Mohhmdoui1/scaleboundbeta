@@ -1,0 +1,23 @@
+{
+  "build": {
+    "env": {
+      "SUPABASE_URL": "https://your-project.supabase.co",
+      "SUPABASE_ANON_KEY": "your-anon-key-here",
+      "ADMIN_ACCESS_KEY": "ALPHA-88"
+    }
+  },
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https://your-project.supabase.co"
+        }
+      ]
+    }
+  ]
+}

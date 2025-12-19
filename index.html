@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScaleBound | Stealth Mode</title>
+    
+    <!-- Fonts: Outfit for a modern, tech feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Tailwind Config -->
+    <script src="/tailwind-config.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body class="antialiased selection:bg-indigo-500 selection:text-white">
+
+    <!-- ThreeJS Background -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- VIEW 1: PUBLIC LANDING PAGE -->
+    <div id="public-view">
+        <!-- Navigation -->
+        <nav class="fixed top-0 left-0 right-0 w-full z-50 flex justify-center pt-0 transition-all duration-500" id="navbar">
+            <div class="nav-container flex items-center justify-between h-20 transition-all duration-500 w-full">
+                <!-- Logo (Left) -->
+                <div id="nav-logo" class="flex-shrink-0 cursor-pointer flex items-center">
+                    <span class="text-2xl font-bold tracking-tighter whitespace-nowrap">Scale<span class="text-indigo-500">Bound</span></span>
+                    <span class="ml-2 text-[10px] bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded border border-indigo-500/30">BETA</span>
+                </div>
+                
+                <!-- Navigation Links (Center) -->
+                <div id="nav-links" class="hidden md:flex flex-1 justify-center items-center space-x-10 whitespace-nowrap overflow-hidden">
+                    <a href="#features" class="text-sm font-medium text-gray-300 hover:text-white hover:text-indigo-400 transition-colors">Protocol</a>
+                    <a href="#roadmap" class="text-sm font-medium text-gray-300 hover:text-white hover:text-indigo-400 transition-colors">Roadmap</a>
+                    <a href="#manifesto" class="text-sm font-medium text-gray-300 hover:text-white hover:text-indigo-400 transition-colors">Manifesto</a>
+                </div>
+                
+                <!-- Right Buttons Group (Right) -->
+                <div id="nav-buttons" class="hidden md:flex items-center space-x-4">
+                    <button onclick="toggleModal()" class="inline-flex items-center text-gray-400 hover:text-white transition-colors font-medium text-xs uppercase tracking-widest whitespace-nowrap">
+                        <i class="fas fa-lock text-[10px] mr-1"></i> Founder Access
+                    </button>
+                    <a href="#waitlist" class="inline-flex items-center justify-center bg-white text-black hover:bg-gray-200 px-5 py-2 rounded-full text-sm font-bold transition-all shadow-[0_0_15px_rgba(255,255,255,0.3)] whitespace-nowrap">
+                        Join Waitlist
+                    </a>
+                </div>
+
+                <!-- Mobile menu button (Kept for mobile) -->
+                <div class="-mr-2 flex md:hidden">
+                    <button type="button" onclick="toggleMobileMenu()" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-white/10 focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu Panel -->
+            <div class="md:hidden hidden glass-panel absolute w-full top-20 left-0" id="mobile-menu">
+                <div class="px-4 pt-4 pb-6 space-y-2">
+                    <a href="#features" class="block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-white/5">Protocol</a>
+                    <a href="#roadmap" class="block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-white/5">Roadmap</a>
+                    <a href="#manifesto" class="block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-white/5">Manifesto</a>
+                    <div class="pt-4 border-t border-white/10 mt-2">
+                        <button onclick="toggleModal()" class="w-full text-left block px-3 py-2 rounded-md text-sm font-medium text-gray-400 hover:text-white uppercase tracking-widest">
+                            <i class="fas fa-lock text-[10px] mr-1"></i> Founder Access
+                        </button>
+                        <a href="#waitlist" class="block mt-3 px-3 py-3 text-center text-black font-bold bg-white rounded-lg shadow-lg">Join Waitlist</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Authentication Modal -->
+        <div id="auth-modal" class="modal fixed inset-0 z-[60] flex items-center justify-center px-4">
+            <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="toggleModal()"></div>
+            <div class="modal-content glass-panel p-8 rounded-2xl w-full max-w-md relative z-10 border border-red-500/20 shadow-[0_0_50px_rgba(255,0,0,0.1)]">
+                <button onclick="toggleModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+                <div class="text-center mb-8">
+                    <div class="mx-auto w-12 h-12 bg-red-500/10 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-lock text-red-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Restricted Access</h3>
+                    <p class="text-gray-400 text-sm">This portal is currently limited to Series A investors and Founding Partners.</p>
+                </div>
+                <form id="access-form" onsubmit="handleLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 uppercase mb-1">Access Key</label>
+                        <input id="access-key" type="password" class="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-red-500 transition-colors tracking-widest" placeholder="••••••••••••">
+                        <p id="error-msg" class="text-red-500 text-xs mt-2 hidden"><i class="fas fa-exclamation-triangle"></i> Invalid Credentials</p>
+                    </div>
+                    <button type="submit" class="w-full bg-white/5 hover:bg-white/10 text-white font-bold py-3 rounded-lg transition-all border border-white/10">
+                        Validate Key
+                    </button>
+                </form>
+                <div class="mt-6 text-center pt-6 border-t border-white/5">
+                    <a href="#waitlist" onclick="toggleModal()" class="text-indigo-400 text-xs hover:text-white transition-colors">Don't have a key? Join the waitlist.</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hero Section -->
+        <section class="relative h-screen flex items-center justify-center overflow-hidden">
+            <div class="absolute inset-0 z-0 bg-gradient-to-b from-transparent via-[#050505]/80 to-[#050505]"></div>
+            
+            <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <div class="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full glass-panel border border-indigo-500/30 text-indigo-300 text-xs font-semibold tracking-widest uppercase animate-float">
+                    <span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
+                    System Loading... 84%
+                </div>
+                <h1 class="text-5xl md:text-7xl lg:text-9xl font-extrabold tracking-tighter mb-8">
+                    The Agency Model <br>
+                    Is <span class="text-gradient">Obsolete.</span>
+                </h1>
+                <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-400 font-light leading-relaxed">
+                    We are building the first autonomous growth engine for information products. 
+                    <br>No account managers. No bloat. Pure algorithmic scale.
+                </p>
+                <div class="mt-12 flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="#waitlist" class="px-8 py-4 bg-white text-black rounded-lg font-bold text-lg hover:bg-gray-200 transition-all shadow-[0_0_30px_rgba(255,255,255,0.2)]">
+                        Request Access
+                    </a>
+                    <a href="#features" class="px-8 py-4 glass-panel rounded-lg font-semibold text-lg hover:bg-white/10 transition-all border border-white/10 text-gray-300">
+                        View Protocol
+                    </a>
+                </div>
+                <p class="mt-6 text-xs text-gray-600 uppercase tracking-widest">Limited spots available for Q3 2025</p>
+            </div>
+            
+            <!-- Scroll Down Indicator -->
+            <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 opacity-30">
+                <div class="h-12 w-0.5 bg-gradient-to-b from-transparent to-white mx-auto"></div>
+            </div>
+        </section>
+
+        <!-- Marquee Quote Section -->
+        <div class="py-4 bg-indigo-900/5 border-y border-white/5 overflow-hidden relative backdrop-blur-sm z-10">
+            <div class="whitespace-nowrap animate-marquee flex gap-12 text-gray-500 font-mono text-xs tracking-widest uppercase">
+                <span>// System Status: Pre-Alpha</span>
+                <span class="text-indigo-500">•</span>
+                <span>// Node connection established</span>
+                <span class="text-indigo-500">•</span>
+                <span>// The revolution will not be televised, it will be automated</span>
+                <span class="text-indigo-500">•</span>
+                <span>// Waiting for deployment...</span>
+                <span class="text-indigo-500">•</span>
+                <span id="waitlist-count">// 4,203 Users on Waitlist</span>
+                <span class="text-indigo-500">•</span>
+            </div>
+        </div>
+
+        <!-- The Reality Check Section -->
+        <section class="py-24 relative bg-[#050505]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="glass-panel p-10 md:p-16 rounded-3xl border border-white/5 reveal text-center relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-50"></div>
+                    
+                    <h2 class="text-2xl md:text-3xl font-light mb-8 text-gray-300">Why we are going <span class="font-bold text-white">stealth.</span></h2>
+                    <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-10 leading-relaxed font-light">
+                        Traditional agencies sell "hours." We are building "outcomes." <br>
+                        The current market is saturated with low-quality service providers using outdated manual methods. 
+                        We are spending the next 6 months perfecting a proprietary AI-driven infrastructure before we let the public in.
+                    </p>
+                    <div class="inline-block px-4 py-2 bg-white/5 rounded border border-white/10 text-xs font-mono text-indigo-400">
+                        STATUS: DEVELOPMENT PHASE
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services (Preview) Section -->
+        <section id="features" class="py-24 relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16 reveal">
+                    <h2 class="text-3xl md:text-5xl font-bold mb-4">Incoming <span class="text-gradient">Capabilities</span></h2>
+                    <p class="text-gray-500 max-w-2xl mx-auto">A glimpse into the ScaleBound ecosystem currently under construction.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Service 1 -->
+                    <div class="glass-card p-8 rounded-2xl reveal relative overflow-hidden group border-white/5">
+                        <div class="absolute top-4 right-4 text-xs font-mono text-gray-600 border border-gray-800 px-2 py-1 rounded">V 0.9</div>
+                        <div class="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 text-gray-300">
+                            <i class="fas fa-microchip text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-white">Neural Ad Buying</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed">
+                            Algorithmic media buying that adjusts bids in real-time based on 400+ data points. No human error.
+                        </p>
+                    </div>
+
+                    <!-- Service 2 -->
+                    <div class="glass-card p-8 rounded-2xl reveal relative overflow-hidden group border-white/5">
+                        <div class="absolute top-4 right-4 text-xs font-mono text-indigo-400 border border-indigo-900/50 px-2 py-1 rounded">IN DEV</div>
+                        <div class="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 text-gray-300">
+                            <i class="fas fa-network-wired text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-white">Funnel Self-Healing</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed">
+                            Landing pages that automatically A/B test headlines and layout structures without manual input.
+                        </p>
+                    </div>
+
+                    <!-- Service 3 -->
+                    <div class="glass-card p-8 rounded-2xl reveal relative overflow-hidden group border-white/5">
+                        <div class="absolute top-4 right-4 text-xs font-mono text-gray-600 border border-gray-800 px-2 py-1 rounded">PLANNED</div>
+                        <div class="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 text-gray-300">
+                            <i class="fas fa-fingerprint text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-white">Identity Resolution</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed">
+                            Tracking technology that recovers 30% more lost leads than standard pixel tracking.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Roadmap Section -->
+        <section id="roadmap" class="py-24 relative bg-black/40">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl md:text-5xl font-bold mb-16 text-center reveal">Launch <span class="text-gradient">Sequence</span></h2>
+                
+                <div class="relative border-l border-white/10 ml-6 space-y-12">
+                    <!-- Timeline Item 1 -->
+                    <div class="relative pl-10 reveal">
+                        <div class="absolute -left-1.5 top-1.5 w-3 h-3 rounded-full bg-green-500 shadow-[0_0_10px_#22c55e]"></div>
+                        <h4 class="text-sm font-mono text-green-500 mb-1">PHASE 1 (COMPLETED)</h4>
+                        <h3 class="text-xl font-bold text-white mb-2">Core Infrastructure</h3>
+                        <p class="text-gray-500 text-sm">Development of the primary GHL snapshots and data-warehousing architecture.</p>
+                    </div>
+
+                    <!-- Timeline Item 2 -->
+                    <div class="relative pl-10 reveal">
+                        <div class="absolute -left-1.5 top-1.5 w-3 h-3 rounded-full bg-indigo-500 shadow-[0_0_10px_#6366f1] animate-pulse"></div>
+                        <h4 class="text-sm font-mono text-indigo-400 mb-1">PHASE 2 (CURRENT)</h4>
+                        <h3 class="text-xl font-bold text-white mb-2">Private Alpha</h3>
+                        <p class="text-gray-500 text-sm">Testing the protocol with 5 hand-picked "Whale" clients ($100k/mo+ revenue). Fine-tuning the algorithms.</p>
+                    </div>
+
+                    <!-- Timeline Item 3 -->
+                    <div class="relative pl-10 reveal">
+                        <div class="absolute -left-1.5 top-1.5 w-3 h-3 rounded-full bg-gray-700"></div>
+                        <h4 class="text-sm font-mono text-gray-600 mb-1">PHASE 3 (Q3 2025)</h4>
+                        <h3 class="text-xl font-bold text-gray-400 mb-2">Public Beta</h3>
+                        <p class="text-gray-600 text-sm">Opening access to the first 50 users on the waitlist. First-come, first-served.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Manifesto / Vision -->
+        <section id="manifesto" class="py-24 relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl md:text-5xl font-bold mb-12 text-center reveal">The <span class="text-gradient">Vision</span></h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Quote 1 -->
+                    <div class="glass-card p-8 rounded-2xl reveal border border-white/5">
+                        <i class="fas fa-quote-left text-2xl text-indigo-500/50 mb-4"></i>
+                        <p class="text-xl text-gray-300 italic mb-6 leading-relaxed font-light">
+                            "The golden era of easy ads is over. The next era belongs to those who own the infrastructure, not just the creative."
+                        </p>
+                        <div class="flex items-center mt-4">
+                            <div class="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center text-xs text-gray-500">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <p class="ml-3 text-sm text-gray-500 font-mono">INTERNAL MEMO #291</p>
+                        </div>
+                    </div>
+
+                    <!-- Quote 2 -->
+                    <div class="glass-card p-8 rounded-2xl reveal border border-white/5">
+                        <i class="fas fa-quote-left text-2xl text-indigo-500/50 mb-4"></i>
+                        <p class="text-xl text-gray-300 italic mb-6 leading-relaxed font-light">
+                            "We aren't building an agency. Agencies are unscalable. We are building a machine that outputs revenue."
+                        </p>
+                        <div class="flex items-center mt-4">
+                            <div class="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center text-xs text-gray-500">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <p class="ml-3 text-sm text-gray-500 font-mono">FOUNDER'S NOTE</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="py-20 relative bg-black/40">
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 reveal">
+                <h2 class="text-3xl font-bold mb-10 text-center">Protocol <span class="text-indigo-400">FAQ</span></h2>
+                
+                <div class="space-y-4">
+                    <div class="glass-panel rounded-xl overflow-hidden">
+                        <button class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none" onclick="this.nextElementSibling.classList.toggle('hidden');">
+                            <span class="font-semibold text-lg text-gray-300">When does the Beta launch?</span>
+                            <i class="fas fa-chevron-down text-indigo-500"></i>
+                        </button>
+                        <div class="px-6 pb-4 text-gray-500 hidden text-sm">
+                            We are currently targeting Q3 2025 for the first wave of waitlist invites.
+                        </div>
+                    </div>
+                    <div class="glass-panel rounded-xl overflow-hidden">
+                        <button class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none" onclick="this.nextElementSibling.classList.toggle('hidden');">
+                            <span class="font-semibold text-lg text-gray-300">How do I increase my chances?</span>
+                            <i class="fas fa-chevron-down text-indigo-500"></i>
+                        </button>
+                        <div class="px-6 pb-4 text-gray-500 hidden text-sm">
+                            Founding members are selected based on their current offer viability. Fill out the waitlist form with accurate revenue data.
+                        </div>
+                    </div>
+                    <div class="glass-panel rounded-xl overflow-hidden">
+                        <button class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none" onclick="this.nextElementSibling.classList.toggle('hidden');">
+                            <span class="font-semibold text-lg text-gray-300">Is this software or service?</span>
+                            <i class="fas fa-chevron-down text-indigo-500"></i>
+                        </button>
+                        <div class="px-6 pb-4 text-gray-500 hidden text-sm">
+                            It is a tech-enabled service. You get the outcomes of a top-tier agency, powered by software infrastructure we control.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Waitlist Section -->
+        <section id="waitlist" class="py-20 relative">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
+                <h2 class="text-4xl md:text-6xl font-bold mb-6">Secure Your <span class="text-gradient">Spot.</span></h2>
+                <p class="text-gray-400 mb-10 text-lg">
+                    We are accepting 50 founding members for the initial public beta. <br>
+                    Don't get left behind when the protocol goes live.
+                </p>
+                
+                <div class="glass-panel p-8 md:p-12 rounded-2xl text-left max-w-xl mx-auto relative overflow-hidden">
+                    <!-- decorative background element -->
+                    <div class="absolute -top-20 -right-20 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl"></div>
+
+                    <form id="waitlist-form" class="space-y-6 relative z-10">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-mono text-gray-500 mb-2">FIRST NAME *</label>
+                                <input type="text" id="first-name" required
+                                       class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition-colors">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-mono text-gray-500 mb-2">LAST NAME *</label>
+                                <input type="text" id="last-name" required
+                                       class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition-colors">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-mono text-gray-500 mb-2">EMAIL ADDRESS *</label>
+                            <input type="email" id="email" required
+                                   class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-mono text-gray-500 mb-2">CURRENT MONTHLY REVENUE *</label>
+                            <select id="monthly-revenue" required
+                                    class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition-colors">
+                                <option value="">Select revenue range</option>
+                                <option value="Pre-Revenue">Pre-Revenue</option>
+                                <option value="$1k - $10k/mo">$1k - $10k/mo</option>
+                                <option value="$10k - $50k/mo">$10k - $50k/mo</option>
+                                <option value="$50k+/mo (Priority Access)">$50k+/mo (Priority Access)</option>
+                            </select>
+                        </div>
+                        <div id="form-message" class="hidden p-3 rounded-lg text-sm"></div>
+                        <button type="submit" id="submit-btn"
+                                class="w-full bg-white text-black hover:bg-gray-200 font-bold py-4 rounded-lg transition-all shadow-[0_0_20px_rgba(255,255,255,0.15)] mt-4 uppercase tracking-widest text-sm flex items-center justify-center">
+                            <span id="submit-text">Join Waitlist</span>
+                            <div id="loading-spinner" class="hidden ml-2">
+                                <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></div>
+                            </div>
+                        </button>
+                        <p class="text-[10px] text-gray-600 text-center mt-4">NO SPAM. ONLY UPDATES ON LAUNCH.</p>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="border-t border-white/5 bg-black/80 backdrop-blur-md pt-16 pb-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="mb-8 md:mb-0 text-center md:text-left">
+                        <span class="text-xl font-bold tracking-tighter">Scale<span class="text-indigo-500">Bound</span></span>
+                        <p class="text-xs text-gray-600 mt-2 font-mono">EST. 2024 • STEALTH MODE</p>
+                    </div>
+                    
+                    <div class="flex space-x-8 text-xs text-gray-500 font-mono uppercase tracking-widest">
+                        <a href="#" class="hover:text-white transition-colors">Twitter</a>
+                        <a href="#" class="hover:text-white transition-colors">Instagram</a>
+                        <a href="#" class="hover:text-white transition-colors">Email</a>
+                        <button onclick="toggleModal()" class="hover:text-white transition-colors cursor-pointer">Founder Access</button>
+                    </div>
+                </div>
+                <div class="mt-8 text-center text-[10px] text-gray-700">
+                    &copy; 2024 ScaleBound. All systems operational.
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- VIEW 2: PRIVATE DASHBOARD (Hidden by default) -->
+    <div id="dashboard-view" class="hidden">
+        <!-- Dashboard loads here via JavaScript -->
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="/supabase-config.js"></script>
+    <script src="/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<div id="dashboard-view" class="relative h-screen w-full bg-[#050505] overflow-hidden text-sm">
+    
+    <div class="scanline"></div>
+
+    <div class="dashboard-grid">
+        <!-- Sidebar -->
+        <div class="border-r border-white/10 bg-black/50 backdrop-blur-md flex flex-col p-4 z-20">
+            <div class="mb-8 mt-2">
+                <span class="text-xl font-bold tracking-tighter text-white">Scale<span class="text-indigo-500">Bound</span></span>
+                <div class="text-[10px] text-gray-500 mt-1 font-mono uppercase tracking-widest">Intelligence Node</div>
+            </div>
+
+            <div class="space-y-1">
+                <a href="#" class="sidebar-link active flex items-center px-4 py-3 text-gray-400 rounded-lg hover:bg-white/5">
+                    <i class="fas fa-chart-line w-6"></i>
+                    <span>Overview</span>
+                </a>
+                <a href="#" class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg hover:bg-white/5">
+                    <i class="fas fa-users w-6"></i>
+                    <span>Waitlist (4,204)</span>
+                </a>
+                <a href="#" class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg hover:bg-white/5">
+                    <i class="fas fa-network-wired w-6"></i>
+                    <span>Campaigns</span>
+                </a>
+                <a href="#" class="sidebar-link flex items-center px-4 py-3 text-gray-400 rounded-lg hover:bg-white/5">
+                    <i class="fas fa-robot w-6"></i>
+                    <span>AI Protocols</span>
+                </a>
+            </div>
+
+            <div class="mt-auto space-y-4">
+                <div class="glass-panel p-3 rounded-lg border border-green-500/20">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                        <span class="text-[10px] text-green-400 font-mono uppercase">System Healthy</span>
+                    </div>
+                    <div class="w-full bg-gray-800 rounded-full h-1">
+                        <div class="bg-green-500 h-1 rounded-full w-[94%]"></div>
+                    </div>
+                </div>
+                <button onclick="handleLogout()" class="flex items-center text-red-400 hover:text-white px-4 py-2 text-xs font-mono uppercase tracking-widest transition-colors">
+                    <i class="fas fa-power-off mr-2"></i> Terminate Session
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex flex-col h-full overflow-hidden relative z-10">
+            <!-- Top Header -->
+            <header class="h-16 border-b border-white/10 flex items-center justify-between px-8 bg-black/20 backdrop-blur-sm">
+                <h2 class="text-lg font-semibold text-white">Mission Control</h2>
+                <div class="flex items-center gap-6">
+                    <div class="flex items-center gap-2 text-xs text-gray-500 font-mono">
+                        <i class="fas fa-globe"></i>
+                        <span>GLOBAL LATENCY: 12ms</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="text-right">
+                            <p class="text-xs text-white font-bold">Admin Alpha</p>
+                            <p class="text-[10px] text-indigo-400">Level 5 Clearance</p>
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white text-xs font-bold shadow-[0_0_15px_rgba(99,102,241,0.5)]">
+                            AA
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scrollable Content -->
+            <div class="flex-1 overflow-y-auto p-8">
+                
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="glass-panel p-6 rounded-xl border-l-2 border-indigo-500 relative overflow-hidden group">
+                        <div class="absolute right-0 top-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                            <i class="fas fa-dollar-sign text-6xl"></i>
+                        </div>
+                        <p class="text-gray-400 text-xs font-mono uppercase mb-2">Total Revenue Generated</p>
+                        <h3 class="text-3xl font-bold text-white" data-stat="revenue">$4,291,040</h3>
+                        <p class="text-green-400 text-xs mt-2"><i class="fas fa-arrow-up"></i> +12.4% this week</p>
+                    </div>
+                    <div class="glass-panel p-6 rounded-xl border-l-2 border-pink-500 relative overflow-hidden group">
+                        <div class="absolute right-0 top-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                            <i class="fas fa-fire text-6xl"></i>
+                        </div>
+                        <p class="text-gray-400 text-xs font-mono uppercase mb-2">Active Ad Spend</p>
+                        <h3 class="text-3xl font-bold text-white" data-stat="ad-spend">$142,800</h3>
+                        <p class="text-gray-500 text-xs mt-2">Deploying across Meta/YT</p>
+                    </div>
+                    <div class="glass-panel p-6 rounded-xl border-l-2 border-cyan-500 relative overflow-hidden group">
+                        <div class="absolute right-0 top-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                            <i class="fas fa-crosshairs text-6xl"></i>
+                        </div>
+                        <p class="text-gray-400 text-xs font-mono uppercase mb-2">Global ROAS</p>
+                        <h3 class="text-3xl font-bold text-white" data-stat="roas">4.82x</h3>
+                        <p class="text-green-400 text-xs mt-2">Target: 4.0x exceeded</p>
+                    </div>
+                    <div class="glass-panel p-6 rounded-xl border-l-2 border-orange-500 relative overflow-hidden group">
+                        <div class="absolute right-0 top-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                            <i class="fas fa-user-clock text-6xl"></i>
+                        </div>
+                        <p class="text-gray-400 text-xs font-mono uppercase mb-2">Waitlist Applications</p>
+                        <h3 class="text-3xl font-bold text-white" data-stat="waitlist">4,204</h3>
+                        <p class="text-green-400 text-xs mt-2"><i class="fas fa-arrow-up"></i> +12% vs yesterday</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Main Chart Area -->
+                    <div class="lg:col-span-2 glass-panel p-6 rounded-xl border border-white/5">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-semibold text-white">Revenue Velocity (Last 30 Days)</h3>
+                            <div class="flex gap-2">
+                                <span class="px-2 py-1 bg-white/5 rounded text-xs text-gray-400 cursor-pointer hover:text-white">7D</span>
+                                <span class="px-2 py-1 bg-indigo-500/20 text-indigo-400 rounded text-xs cursor-pointer border border-indigo-500/30">30D</span>
+                                <span class="px-2 py-1 bg-white/5 rounded text-xs text-gray-400 cursor-pointer hover:text-white">YTD</span>
+                            </div>
+                        </div>
+                        <!-- Mock Chart Visualization -->
+                        <div class="h-64 flex items-end justify-between gap-2 px-2 pb-2 border-b border-l border-white/10 relative">
+                            <!-- Grid lines -->
+                            <div class="absolute top-[25%] w-full h-[1px] bg-white/5"></div>
+                            <div class="absolute top-[50%] w-full h-[1px] bg-white/5"></div>
+                            <div class="absolute top-[75%] w-full h-[1px] bg-white/5"></div>
+
+                            <div class="w-full bg-indigo-500/20 rounded-t-sm chart-bar hover:bg-indigo-500 transition-colors h-[30%]"></div>
+                            <div class="w-full bg-indigo-500/30 rounded-t-sm chart-bar hover:bg-indigo-500 transition-colors h-[45%]"></div>
+                            <div class="w-full bg-indigo-500/40 rounded-t-sm chart-bar hover:bg-indigo-500 transition-colors h-[35%]"></div>
+                            <div class="w-full bg-indigo-500/50 rounded-t-sm chart-bar hover:bg-indigo-500 transition-colors h-[60%]"></div>
+                            <div class="w-full bg-indigo-500/60 rounded-t-sm chart-bar hover:bg-indigo-500 transition-colors h-[55%]"></div>
+                            <div class="w-full bg-indigo-500/70 rounded-t-sm chart-bar hover:bg-indigo-500 transition-colors h-[75%]"></div>
+                            <div class="w-full bg-indigo-500/80 rounded-t-sm chart-bar hover:bg-indigo-500 transition-colors h-[85%]"></div>
+                            <div class="w-full bg-indigo-500 rounded-t-sm chart-bar shadow-[0_0_20px_rgba(99,102,241,0.5)] h-[92%]"></div>
+                        </div>
+                        <div class="flex justify-between text-xs text-gray-500 mt-2 px-2 font-mono">
+                            <span>01</span><span>05</span><span>10</span><span>15</span><span>20</span><span>25</span><span>30</span>
+                        </div>
+                    </div>
+
+                    <!-- Live Feed -->
+                    <div class="glass-panel p-6 rounded-xl border border-white/5 flex flex-col">
+                        <h3 class="text-lg font-semibold text-white mb-4">System Activity</h3>
+                        <div class="flex-1 overflow-hidden relative">
+                            <div class="absolute inset-0 overflow-y-auto space-y-4 pr-2 font-mono text-xs">
+                                <!-- Activity feed will be populated by JavaScript -->
+                                <div class="flex gap-3">
+                                    <span class="text-gray-500" id="time-1">10:42:01</span>
+                                    <span class="text-indigo-400">SYS_LOG</span>
+                                    <span class="text-gray-300">Dashboard loaded successfully</span>
+                                </div>
+                                <div class="flex gap-3">
+                                    <span class="text-gray-500" id="time-2">10:41:55</span>
+                                    <span class="text-green-400">DATA_SYNC</span>
+                                    <span class="text-gray-300">Waitlist data refreshed</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Waitlist Table -->
+                <div class="mt-8 glass-panel rounded-xl overflow-hidden border border-white/5">
+                    <div class="flex items-center justify-between px-6 py-4 border-b border-white/10">
+                        <h3 class="text-lg font-semibold text-white">Recent Waitlist Applications</h3>
+                        <button onclick="loadRecentWaitlist()" class="text-xs text-indigo-400 hover:text-white flex items-center gap-1">
+                            <i class="fas fa-sync text-xs"></i> Refresh
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table id="waitlist-table" class="w-full text-left text-sm">
+                            <thead class="bg-white/5 text-xs uppercase font-mono text-gray-400">
+                                <tr>
+                                    <th class="px-6 py-4">Name</th>
+                                    <th class="px-6 py-4">Email</th>
+                                    <th class="px-6 py-4">Revenue</th>
+                                    <th class="px-6 py-4">Date</th>
+                                    <th class="px-6 py-4">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Waitlist data will be populated by JavaScript -->
+                                <tr>
+                                    <td colspan="5" class="px-6 py-8 text-center text-gray-500">
+                                        Loading waitlist data...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
