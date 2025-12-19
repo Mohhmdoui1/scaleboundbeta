@@ -1,9 +1,31 @@
-// 1. Mobile Menu Logic
+// Mobile Menu Logic - UPDATED
 const mobileMenu = document.getElementById('mobile-menu');
 function toggleMobileMenu() {
     mobileMenu.classList.toggle('hidden');
+    // Also close any open modal
+    const modal = document.getElementById('auth-modal');
+    if (modal.classList.contains('open')) {
+        modal.classList.remove('open');
+    }
 }
+// Scroll Animation - UPDATED
+function checkScroll() {
+    // Reveal Logic
+    const triggerBottom = window.innerHeight / 5 * 4;
+    revealElements.forEach(box => {
+        const boxTop = box.getBoundingClientRect().top;
+        if (boxTop < triggerBottom) {
+            box.classList.add('active');
+        }
+    });
 
+    // Floating Navbar Logic - FIXED
+    if (window.scrollY > 100) {
+        navbar.classList.add('nav-scrolled');
+    } else {
+        navbar.classList.remove('nav-scrolled');
+    }
+}
 // 2. Modal Logic
 function toggleModal() {
     const modal = document.getElementById('auth-modal');

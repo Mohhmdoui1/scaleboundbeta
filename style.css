@@ -74,8 +74,17 @@ nav.nav-scrolled {
 /* Nav Links Transformation */
 #nav-links {
     transition: all 0.4s ease;
-    max-width: 500px;
+    max-width: 100%;
     opacity: 1;
+    display: flex; /* Make sure it's flex */
+}
+
+/* Show links when NOT scrolled */
+nav:not(.nav-scrolled) #nav-links {
+    max-width: 100%;
+    opacity: 1;
+    overflow: visible;
+    pointer-events: auto;
 }
 
 /* Hide links when scrolled */
@@ -87,7 +96,26 @@ nav.nav-scrolled #nav-links {
     margin: 0;
 }
 
-/* Logo Adjustment */
+/* Make sure mobile menu is properly hidden/shown */
+#mobile-menu {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#mobile-menu.hidden {
+    display: none !important;
+}
+
+#mobile-menu:not(.hidden) {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Ensure links are visible and white in mobile menu */
+#mobile-menu a {
+    color: white;
+    opacity: 1;
+}
 #nav-logo span {
     transition: opacity 0.3s;
 }
