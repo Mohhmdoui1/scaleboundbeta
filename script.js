@@ -1,31 +1,22 @@
-// Mobile Menu Logic - UPDATED
+// 1. Mobile Menu Logic
 const mobileMenu = document.getElementById('mobile-menu');
 function toggleMobileMenu() {
     mobileMenu.classList.toggle('hidden');
-    // Also close any open modal
-    const modal = document.getElementById('auth-modal');
-    if (modal.classList.contains('open')) {
-        modal.classList.remove('open');
+    // Close menu when clicking outside
+    if (!mobileMenu.classList.contains('hidden')) {
+        setTimeout(() => {
+            document.addEventListener('click', closeMobileMenuOnClickOutside);
+        }, 10);
     }
 }
-// Scroll Animation - UPDATED
-function checkScroll() {
-    // Reveal Logic
-    const triggerBottom = window.innerHeight / 5 * 4;
-    revealElements.forEach(box => {
-        const boxTop = box.getBoundingClientRect().top;
-        if (boxTop < triggerBottom) {
-            box.classList.add('active');
-        }
-    });
 
-    // Floating Navbar Logic - FIXED
-    if (window.scrollY > 100) {
-        navbar.classList.add('nav-scrolled');
-    } else {
-        navbar.classList.remove('nav-scrolled');
+function closeMobileMenuOnClickOutside(e) {
+    if (!mobileMenu.contains(e.target) && !e.target.closest('#mobile-menu-button')) {
+        mobileMenu.classList.add('hidden');
+        document.removeEventListener('click', closeMobileMenuOnClickOutside);
     }
 }
+
 // 2. Modal Logic
 function toggleModal() {
     const modal = document.getElementById('auth-modal');
@@ -209,19 +200,33 @@ function checkScroll() {
         }
     });
 
-    // Floating Navbar Logic
-    if (window.scrollY > 100) {
+    // Floating Navbar Logic - UPDATED
+    if (window.scrollY > 50) { // Reduced from 100 to 50 for earlier effect
         navbar.classList.add('nav-scrolled');
     } else {
         navbar.classList.remove('nav-scrolled');
     }
 }
-window.addEventListener('scroll', checkScroll);
+
+// Use requestAnimationFrame for smoother scrolling
+let ticking = false;
+window.addEventListener('scroll', () => {
+    if (!ticking) {
+        window.requestAnimationFrame(() => {
+            checkScroll();
+            ticking = false;
+        });
+        ticking = true;
+    }
+});
+
 checkScroll(); // Trigger once on load
 
 // 9. Three.js Animated Background (Particle Network)
 const initThreeJS = () => {
     const canvas = document.querySelector('#bg-canvas');
+    if (!canvas) return;
+    
     const scene = new THREE.Scene();
     
     // Fog to create depth and hide edges
@@ -392,7 +397,11 @@ function setupSidebarNavigation() {
 // 11. Event Listeners
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize Three.js
-    initThreeJS();
+    try {
+        initThreeJS();
+    } catch (error) {
+        console.error('Three.js initialization error:', error);
+    }
     
     // Waitlist form submission
     const waitlistForm = document.getElementById('waitlist-form');
@@ -407,7 +416,24 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Check if user is already authenticated (dashboard view)
-    if (window.supabaseFunctions.isAdminAuthenticated()) {
+    if (window.supabaseFunctions && window.supabaseFunctions.isAdminAuthenticated()) {
         showDashboard();
     }
+    
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href === '#' || href === '#waitlist') {
+                e.preventDefault();
+                const targetElement = document.querySelector(href);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        });
+    });
 });

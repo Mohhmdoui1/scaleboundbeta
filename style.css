@@ -41,6 +41,15 @@ body {
 /* --- DYNAMIC HEADER STYLES --- */
 nav {
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 50;
+    display: flex;
+    justify-content: center;
+    padding-top: 0;
 }
 
 /* Initial State: Full Width */
@@ -52,65 +61,96 @@ nav {
     padding: 0 1.5rem;
     background: transparent;
     border: 1px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 5rem; /* h-20 */
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Scrolled State: Minimized Pill */
 nav.nav-scrolled .nav-container {
-    width: fit-content;
-    margin: 0 auto;
+    width: 90%;
+    max-width: 1200px;
+    margin: 1.25rem auto; /* top-5 */
     padding: 0.5rem 1.5rem;
-    background: rgba(10, 10, 10, 0.8);
+    background: rgba(10, 10, 10, 0.95);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 9999px; /* Pill shape */
     box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-    gap: 2rem; /* Add spacing between Logo and Buttons */
+    gap: 1rem; /* Reduced gap */
+    height: 3.5rem; /* Smaller height when scrolled */
 }
 
 nav.nav-scrolled {
-    top: 20px; /* Float from top */
+    top: 0;
 }
 
-/* FIX FOR NAV LINKS VISIBILITY */
+/* Nav Links - ALWAYS VISIBLE */
 #nav-links {
-    max-width: 500px !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    display: flex !important;
+    transition: all 0.4s ease;
+    opacity: 1;
+    visibility: visible;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5rem; /* space-x-10 equivalent */
 }
 
+#nav-links a {
+    color: rgb(209 213 219); /* text-gray-300 */
+    font-size: 0.875rem; /* text-sm */
+    font-weight: 500;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+#nav-links a:hover {
+    color: rgb(99 102 241); /* text-indigo-400 */
+}
+
+/* When scrolled, links still visible but container shrinks */
 nav.nav-scrolled #nav-links {
-    max-width: 0 !important;
-    opacity: 0 !important;
-    visibility: hidden !important;
+    opacity: 1;
+    visibility: visible;
+    max-width: none;
+    overflow: visible;
+    pointer-events: auto;
+    margin: 0;
 }
 
-/* Ensure mobile menu is accessible */
+/* Logo Adjustment */
+#nav-logo span {
+    transition: opacity 0.3s;
+}
+
+/* Nav Buttons - ALWAYS VISIBLE */
+#nav-buttons {
+    display: flex;
+    align-items: center;
+    gap: 1rem; /* space-x-4 */
+    opacity: 1;
+    visibility: visible;
+}
+
+nav.nav-scrolled #nav-buttons {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Mobile menu button (Kept for mobile) */
 #mobile-menu {
     background: rgba(20, 20, 25, 0.95);
     backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-#mobile-menu a {
+#mobile-menu a, #mobile-menu button {
     color: white !important;
     opacity: 1 !important;
-}
-
-/* Make sure the links are visible on larger screens */
-@media (min-width: 768px) {
-    #nav-links {
-        max-width: 500px !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-    }
-}
-/* Ensure links are visible and white in mobile menu */
-#mobile-menu a {
-    color: white;
-    opacity: 1;
-}
-#nav-logo span {
-    transition: opacity 0.3s;
 }
 
 /* Futuristic Text Gradient */
@@ -187,25 +227,28 @@ nav.nav-scrolled #nav-links {
 
 .hidden { display: none !important; }
 
-/* Form message styles */
-.success-message {
-    background: rgba(34, 197, 94, 0.1);
-    border: 1px solid rgba(34, 197, 94, 0.2);
-    color: #22c55e;
+/* Responsive adjustments */
+@media (max-width: 767px) {
+    #nav-links, #nav-buttons {
+        display: none;
+    }
+    
+    .nav-container {
+        padding: 0 1rem;
+    }
+    
+    nav.nav-scrolled .nav-container {
+        width: 95%;
+        padding: 0.5rem 1rem;
+    }
 }
 
-.error-message {
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.2);
-    color: #ef4444;
-}
-
-/* Loading spinner */
-.loading-spinner {
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+@media (min-width: 768px) {
+    #nav-links, #nav-buttons {
+        display: flex;
+    }
+    
+    #mobile-menu-button {
+        display: none;
+    }
 }
