@@ -71,46 +71,39 @@ nav.nav-scrolled {
     top: 20px; /* Float from top */
 }
 
-/* Nav Links Transformation */
+/* FIX FOR NAV LINKS VISIBILITY */
 #nav-links {
-    transition: all 0.4s ease;
-    max-width: 100%;
-    opacity: 1;
-    display: flex; /* Make sure it's flex */
+    max-width: 500px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
 }
 
-/* Show links when NOT scrolled */
-nav:not(.nav-scrolled) #nav-links {
-    max-width: 100%;
-    opacity: 1;
-    overflow: visible;
-    pointer-events: auto;
-}
-
-/* Hide links when scrolled */
 nav.nav-scrolled #nav-links {
-    max-width: 0;
-    opacity: 0;
-    overflow: hidden;
-    pointer-events: none;
-    margin: 0;
+    max-width: 0 !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
 }
 
-/* Make sure mobile menu is properly hidden/shown */
+/* Ensure mobile menu is accessible */
 #mobile-menu {
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    background: rgba(20, 20, 25, 0.95);
+    backdrop-filter: blur(20px);
 }
 
-#mobile-menu.hidden {
-    display: none !important;
+#mobile-menu a {
+    color: white !important;
+    opacity: 1 !important;
 }
 
-#mobile-menu:not(.hidden) {
-    display: block;
-    opacity: 1;
-    transform: translateY(0);
+/* Make sure the links are visible on larger screens */
+@media (min-width: 768px) {
+    #nav-links {
+        max-width: 500px !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
 }
-
 /* Ensure links are visible and white in mobile menu */
 #mobile-menu a {
     color: white;
